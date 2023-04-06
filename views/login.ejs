@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login Form </title>
+</head>
+<body>
+    <div class="topnav">
+        <a class="active" href="/users">Home</a>
+        <a href="/users/about">ABOUT YOUR AGENT</a>
+        <a href="/users/contact">CONTACT</a>
+        <a href="/users/register">REGISTER</a>
+        <a href="/sessions/login">LOGIN</a>
+      </div>
+	<h1>Login to Your Account</h1>
+	<form action="/sessions/login" method="POST">
+		<label for="email">Email:</label>
+		<input type="email" id="email" name="email" required>
+		<br>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" required>
+		<br>
+		<input type="submit" value="Login">
+	</form>
+    <a href="/users">Back to index</a>
+</body>
+</html>

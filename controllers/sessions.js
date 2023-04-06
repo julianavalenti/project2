@@ -34,14 +34,18 @@ sessionsRouter.post('/login', async (req, res) => {
     try {
       const foundUser = await User.findOne({ email: req.body.email });
       if (!foundUser) {
-        res.send(`Oops! No user with that email address has been registered.`);
+        res.render('login.ejs', { 
+            message: 'Email not found' 
+        });
       } else {
         const passwordMatches = await bcrypt.compare(req.body.password, foundUser.password);
         if (passwordMatches) {
           req.session.currentUser = foundUser;
           res.redirect('/sessions/index');
         } else {
-          res.send('Oops! Invalid credentials.');
+          res.render('login.ejs', {
+             message: 'Invalid Password'
+             });
         }
       }
     } catch (error) {
@@ -49,6 +53,7 @@ sessionsRouter.post('/login', async (req, res) => {
       res.status(500).send('Error logging in user');
     }
   });
+  
 
 
 module.exports = sessionsRouter;

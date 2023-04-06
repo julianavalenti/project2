@@ -20,7 +20,13 @@
 		<input type="password" id="password" name="password" required>
 		<br>
 		<input type="submit" value="Login">
+        <% if (typeof message !== "undefined") { %>
+            <p><%= message %></p>
+        <% } %>
 	</form>
     <a href="/users">Back to index</a>
+
+    
+
 </body>
 </html>

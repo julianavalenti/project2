@@ -29,6 +29,34 @@ sessionsRouter.get('/logout', (req, res) => {
     });
 });
 
+
+//U
+// Route for updating the password 
+// foundUser.name = req.body.name
+// it needs a statement that validates if the form entry a value or not
+sessionsRouter.put('/edit', async (req, res) => {
+    try {
+        const foundUser = await User.findById(req.session.currentUser._id);
+        const newPassword = await bcrypt.hash(req.body.newPassword, 10);
+        foundUser.password = newPassword;
+        
+        await foundUser.save();
+        await User.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+        {
+            new:true
+        }
+        )
+        res.redirect('/sessions/account');
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating password');
+    }
+});
+
+
 // Create (login route)
 sessionsRouter.post('/login', async (req, res) => {
     try {
@@ -53,7 +81,26 @@ sessionsRouter.post('/login', async (req, res) => {
       res.status(500).send('Error logging in user');
     }
   });
-  
 
+  //E
+
+  sessionsRouter.get("/edit", async (req,res) => {
+    const foundUser = await User.findById(
+        req.params.id,
+        );
+    res.render("portal/edit.ejs", {
+        user: foundUser,
+    })
+})
+
+  
+//S
+
+sessionsRouter.get('/account', (req, res) => {
+	
+    res.render('portal/account.ejs', {
+        
+    });
+}); 
 
 module.exports = sessionsRouter;

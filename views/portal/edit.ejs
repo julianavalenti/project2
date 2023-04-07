@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Personal information</h1>
+
+    <form action="/sessions/edit?_method=PUT" method="POST">
+      
+        Name <input type="text" name="name" value="<%=currentUser.name%>" /><br />
+        Phone: <input type="number" name="phone" value="<%=currentUser.phone%>" /><br />
+        Email: <input type="text" name="email" value="<%=currentUser.email%>" /><br />
+        New Password: <input type="password" name="newPassword" value="newPassword "/><br />
+        
+        <br />
+        <input type="submit" value="Submit Changes" />
+      </form>
+   
+    
+</body>
+</html>

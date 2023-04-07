@@ -6,11 +6,13 @@ const app = express();
 const session = require('express-session');
 const userController = require('./controllers/users');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 const PORT = process.env.PORT;
 
 // Middleware
 // Body parser middleware: give us access to req.body
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 // Routes / Controllers
 
@@ -20,12 +22,21 @@ app.use(
     session({
         secret: process.env.SECRET,
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
+        keepSessionInfo: true
     }));
+
+    app.use((req,res,next) => {
+        res.locals.currentUser = req.session.currentUser
+        next()
+    }) 
+
+    // the function above creates the variable called "currentUser", so I can use in all templates after user login.
 
 // Routes / Controllers
 const sessionsController = require('./controllers/sessions');
 app.use('/sessions', sessionsController);
+
 
 // Database Configuration
 mongoose.connect(process.env.DATABASE_URL, {

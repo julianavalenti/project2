@@ -33,28 +33,48 @@ sessionsRouter.get('/logout', (req, res) => {
 //U
 // Route for updating the password 
 // foundUser.name = req.body.name
-// it needs a statement that validates if the form entry a value or not
+
 sessionsRouter.put('/edit', async (req, res) => {
     try {
         const foundUser = await User.findById(req.session.currentUser._id);
-        const newPassword = await bcrypt.hash(req.body.newPassword, 10);
-        foundUser.password = newPassword;
-        
+
+        foundUser.name = req.body.name;
+        foundUser.email = req.body.email;
+        foundUser.phone = req.body.phone;
+
         await foundUser.save();
-        await User.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-        {
-            new:true
+        req.session.currentUser = foundUser
+        res.redirect('/sessions/index');
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating personal information');
+    }
+});
+
+sessionsRouter.put('/password', async (req, res) => {
+    try {
+        const foundUser = await User.findById(req.session.currentUser._id);
+
+        
+        if (req.body.newPassword) {
+            const newPassword = await bcrypt.hash(req.body.newPassword, 10);
+            foundUser.password = newPassword;
+            await foundUser.save();
+            res.redirect('/sessions/account');
+        } else {
+            
+            res.status(400).send('New password is required');
         }
-        )
-        res.redirect('/sessions/account');
 
     } catch (error) {
         console.error(error);
         res.status(500).send('Error updating password');
     }
+   
 });
+
+
 
 
 // Create (login route)

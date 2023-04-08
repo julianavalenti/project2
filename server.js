@@ -16,7 +16,7 @@ app.use(methodOverride('_method'));
 
 // Routes / Controllers
 
-app.use('/users', userController);
+
 
 app.use(
     session({
@@ -31,12 +31,14 @@ app.use(
         next()
     }) 
 
+    
     // the function above creates the variable called "currentUser", so I can use in all templates after user login.
 
 // Routes / Controllers
 const sessionsController = require('./controllers/sessions');
 app.use('/sessions', sessionsController);
 
+app.use('/users', userController);
 
 // Database Configuration
 mongoose.connect(process.env.DATABASE_URL, {

@@ -8,6 +8,7 @@ const userController = require('./controllers/users');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const PORT = process.env.PORT;
+const MongoStore = require('connect-mongo');
 
 // Middleware
 // Body parser middleware: give us access to req.body
@@ -23,8 +24,14 @@ app.use(
         secret: process.env.SECRET,
         resave: false,
         saveUninitialized: false,
-        keepSessionInfo: true
+        keepSessionInfo: true,
+         store: MongoStore.create({ mongoUrl: process.env.DATABASE_URL ,
+        ttl: 14 * 24 * 60 * 60,
+        autoRemove: 'native' 
+        })
     }));
+
+   
 
     app.use((req,res,next) => {
         res.locals.currentUser = req.session.currentUser
@@ -57,6 +64,18 @@ db.on('disconnected', () => console.log('mongo disconnected'));
 // app.get('/', (req, res) => {
 //     res.render('index.ejs');
 // });
+app.get('/', (req,res,next) => {
+    req.session.user = {
+        uuid: '12234-2345-2323423'
+    }
+    req.session.save(err => {
+        if(err){
+            console.log(err);
+        } else {
+            res.send(req.session.user)
+        }
+    });
+})
 
 app.get('/users/about', (req, res) => {
     res.render('show.ejs');
